@@ -1,3 +1,5 @@
+from Player.Player import Player
+
 __author__ = 'Mike'
 
 # anchor extraction from html document
@@ -14,7 +16,7 @@ password = 'igQpbdE3GtouQNG8h'
 
 fanduelurl = 'https://www.fanduel.com/c/CCAuth'
 
-fan_duel_game_url = 'https://www.fanduel.com/e/Game/12564'
+fan_duel_game_url = 'https://www.fanduel.com/e/Game/12662'
 
 # data= {
 #     'cc_session_id': 'qleqcfn08cmcq5tldjhn8f0if3',
@@ -39,9 +41,29 @@ json_text = re.search(r'^\s*FD\.playerpicker\.allPlayersFullData\s*=\s*({.*?})\s
 
 data = json.loads(json_text)
 
-print json.dumps(data,indent=1)
-# data.keys()
-# for key in data.keys(): print key
+
+# print json.dumps(data,indent=1)
+
+# print data
+
+
+fan_duel_players = list()
+for fan_duel_id in data.keys():
+
+    position = data[fan_duel_id][0]
+    name = data[fan_duel_id][1]
+    team_number = data[fan_duel_id][2]
+    fan_duel_cost = data[fan_duel_id][5]
+    fan_duel_fppg = data[fan_duel_id][6]
+
+    player = Player(name, position, team_number, fan_duel_id, fan_duel_cost, fan_duel_fppg)
+
+    fan_duel_players.append(player)
+
+print fan_duel_players.__sizeof__()
+
+for player in fan_duel_players:
+    player.print_player()
 
 
 
