@@ -21,5 +21,8 @@ class Player(object):
         print "Fan Duel FPPG: " + str(self.fan_duel_fppg)
         print ""
 
+    def getFPPG(self):
+        return self.fan_duel_fppg
+
 
 
