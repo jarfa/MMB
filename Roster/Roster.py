@@ -8,10 +8,14 @@ class Roster:
         self.allocated = dict((k,0) for k  in limits.keys())
         self.player_list = []
 
-    def add(player):
+    def add(self, player):
         if self.allocated[player.position] + 1 > self.limits[player.position]:
             raise Exception(
                 "Can't add, already have enough players at position %s (limit %d)" %
                 (player.position, self.limits[player.position]))
         self.allocated[player.position] += 1
         self.player_list.append(player)
+
+    def __repr__(self):
+        for p in player_list:
+            print "%s: %s" % (player.name, player.position)
