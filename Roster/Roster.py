@@ -19,3 +19,17 @@ class Roster:
     def __repr__(self):
         for p in player_list:
             print "%s: %s" % (player.name, player.position)
+
+    def length(self):
+        return len(player_list)
+
+    def test_invariants(self, budget=None):
+        if budget:
+            assert budget >= sum(p.cost for p in self.player_list)
+
+        assert self.length() == len(self.limits.keys())
+
+        for k,v in self.allocated.iteritems():
+            if v != self.limits[k]:
+                raise Exception("For position %s, %d allocated out of %d" %
+                (k, v, self.limits[k]))
