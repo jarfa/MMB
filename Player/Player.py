@@ -1,4 +1,4 @@
-__author__ = 'Mike'
+__author__ = 'MMB'
 class Player(object):
 
     def __init__(self, name, position, team_number, fan_duel_id, fan_duel_cost, fan_duel_fppg):
@@ -17,7 +17,7 @@ class Player(object):
         print "Position: " + self.position
         print "Team Number: " + self.team_number
         print "Fan Duel Id: " + self.fan_duel_id
-        print "Fan Duel Cost: " + self.fan_duel_cost
+        print "Fan Duel Cost: " + str(self.fan_duel_cost)
         print "Fan Duel FPPG: " + str(self.fan_duel_fppg)
         print ""
 
