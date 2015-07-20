@@ -1,9 +1,8 @@
-from Player.Player import Player
-
 __author__ = 'Mike'
 
 # anchor extraction from html document
 from bs4 import BeautifulSoup
+from Player.Player import Player
 import urllib2
 import re
 import json
@@ -21,7 +20,7 @@ json_text = re.search(r'^\s*FD\.playerpicker\.allPlayersFullData\s*=\s*({.*?})\s
 data = json.loads(json_text)
 
 
-# print json.dumps(data,indent=1)
+print json.dumps(data,indent=1)
 
 
 fan_duel_players = list()
