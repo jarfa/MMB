@@ -11,7 +11,7 @@ def simple_list(player_list, budget = 35000):
 
     """
     roster = Roster()
-    player_list = player_list.sort(key=lambda p: p.value/p.cost, reverse=True)
+    player_list.sort(key=lambda p: p.value/p.cost, reverse=True)
     
     for p in player_list:
         if roster.allocated[p.position] < roster.limits[p.position] \
