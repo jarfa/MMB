@@ -7,8 +7,8 @@ class Player(object):
         self.position = position
         self.team_number = team_number
         self.fan_duel_id = fan_duel_id
-        self.fan_duel_cost = fan_duel_cost
-        self.fan_duel_fppg = fan_duel_fppg
+        self.fan_duel_cost = float(fan_duel_cost)
+        self.fan_duel_fppg = float(fan_duel_fppg)
 
 
     def print_player(self):
