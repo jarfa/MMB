@@ -8,10 +8,28 @@ class Roster:
         self.allocated = dict((k,0) for k  in limits.keys())
         self.player_list = []
 
-    def add(player):
+    def add(self, player):
         if self.allocated[player.position] + 1 > self.limits[player.position]:
             raise Exception(
                 "Can't add, already have enough players at position %s (limit %d)" %
                 (player.position, self.limits[player.position]))
         self.allocated[player.position] += 1
         self.player_list.append(player)
+
+    def __repr__(self):
+        for p in player_list:
+            print "%s: %s" % (player.name, player.position)
+
+    def length(self):
+        return len(player_list)
+
+    def test_invariants(self, budget=None):
+        if budget:
+            assert budget >= sum(p.cost for p in self.player_list)
+
+        assert self.length() == len(self.limits.keys())
+
+        for k,v in self.allocated.iteritems():
+            if v != self.limits[k]:
+                raise Exception("For position %s, %d allocated out of %d" %
+                (k, v, self.limits[k]))
