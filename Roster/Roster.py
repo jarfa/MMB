@@ -1,7 +1,7 @@
 __author__ = 'Mike'
 
 class Roster:
-    def __init__(self, limits = {
+    def __init__(self, limits={
         'P':1, 'C':1, '1B':1, '2B': 1, '3B': 1, 'SS': 1, 'OF': 3
         }):
         self.limits = limits
@@ -17,11 +17,12 @@ class Roster:
         self.player_list.append(player)
 
     def __repr__(self):
-        for p in player_list:
-            print "%s: %s" % (player.name, player.position)
+        #sor this?
+        for p in self.player_list:
+            print "%s: %s" % (p.name, p.position)
 
     def length(self):
-        return len(player_list)
+        return len(self.player_list)
 
     def is_full(self):
         for p,num in self.allocated.iteritems():
@@ -29,6 +30,9 @@ class Roster:
                 return False
 
         return True
+
+    def get_value(self):
+        return sum(p.value for p in self.player_list)
 
     def test_invariants(self, budget=None):
         if budget:
