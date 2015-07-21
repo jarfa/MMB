@@ -47,8 +47,3 @@ def get_fan_duel_players(fan_duel_game_url):
         fan_duel_players.append(player)
 
     return fan_duel_players
-
-
-
-
-
