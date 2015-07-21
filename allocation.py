@@ -63,6 +63,7 @@ def mutate_roster(roster, player_list, budget, num_remove=2):
     #take away num_remove of the current roster, re-build using other players
     remove_list = random.sample(roster.player_list, num_remove)
     new_list = list(set(player_list) - set(remove_list))
+    roster.test_invariants(budget)
     return simple_list(new_list, budget, debug=False)
 
 def genetic_list(player_list, budget = 35000, epochs=10, num_children = 5, 
