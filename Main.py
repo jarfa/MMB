@@ -1,5 +1,5 @@
-from Evaluator.EvaluatorBasic import EvaluatorBasic
-from Scraper.FanDuelScraper import FanDuelScraper
+import EvaluatorBasic
+import FanDuelScraper
 
 __author__ = 'Mike'
 

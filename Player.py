@@ -1,4 +1,4 @@
-from Player import TeamNumberToNameMapping
+import TeamNumberToNameMapping
 
 __author__ = 'MMB'
 class Player(object):
@@ -53,9 +53,8 @@ class Player(object):
     def setBaseballReferenceId(self, baseball_reference_id):
         self.baseball_reference_id = baseball_reference_id
 
-
-
-
+    def getPosition(self):
+        return self.position
 
 
 

@@ -1,11 +1,14 @@
 __author__ = 'Mike'
 
 # anchor extraction from html document
-from bs4 import BeautifulSoup
-from Player.Player import Player
 import urllib2
 import re
 import json
+
+from bs4 import BeautifulSoup
+
+import Player
+
 
 class FanDuelScraper:
 
