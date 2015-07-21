@@ -1,5 +1,4 @@
-
-
+import logging
 import random
 from Roster import Roster
 
@@ -27,7 +26,7 @@ from Roster import Roster
 #     r = p.solve('interalg', plot=1, iprint = 1) #could also solve with 'glpk'
 #     # see r.solutions, r.solutions.coords, r.solutions.values
 
-def simple_list(player_list, budget = 35000, debug=False):
+def simple_list(player_list, budget = 35000, debug=False, logger=None):
     """
     player_list is a list of Player objects
     sort players by value/cost
@@ -43,7 +42,10 @@ def simple_list(player_list, budget = 35000, debug=False):
                 remaining_budget >= p.fan_duel_cost:
             roster.add(p)
             remaining_budget -= p.fan_duel_cost
+            logger.debug("Currently have %d players: %s", roster.length(), roster)
+            logger.debug("Budget: %d/%d", remaining_budget, budget)
         elif debug: 
+            #TODO: replauce debub with logger state
             if p.fan_duel_cost > remaining_budget:
                 reason_string = "player cost (%d) was over remaining budget (%d/%d)" % (
                     p.fan_duel_cost, remaining_budget, budget)
@@ -51,7 +53,7 @@ def simple_list(player_list, budget = 35000, debug=False):
                 reason_string = "slot for position %s already has %d members" % (
                     p.position, roster.allocated[p.position])
 
-            print ("Skipped %s because " % p.name) + reason_string
+            logger.debug(("Skipped %s because " % p.name) + reason_string)
             
         if roster.is_full():
                 break
@@ -59,26 +61,33 @@ def simple_list(player_list, budget = 35000, debug=False):
     roster.test_invariants(budget)
     return roster
 
-def mutate_roster(roster, player_list, budget, num_remove=2):
+def mutate_roster(roster, player_list, budget, num_remove=2, logger=None):
     #take away num_remove of the current roster, re-build using other players
     remove_list = random.sample(roster.player_list, num_remove)
     new_list = list(set(player_list) - set(remove_list))
-    return simple_list(new_list, budget, debug=False)
+    roster.test_invariants(budget)
+    return simple_list(new_list, budget, debug=False, logger=logger)
 
 def genetic_list(player_list, budget = 35000, epochs=10, num_children = 5, 
-    num_survivors = 3, num_remove = 2, seed=10):
-    random.seed(seed)
+    num_survivors = 3, num_remove = 2, rseed=10, logger=None):
+    random.seed(rseed)
     #initialize simple_list
-    survivors = [simple_list(player_list, budget, debug=False)] #1-length list for the first iteration
+    survivors = [simple_list(player_list, budget, debug=False, logger=logger)] #1-length list for the first iteration
     #mutating means remove 1 (or 2?) player that's currently in the roster from player_list, try again
     for e in xrange(epochs):
-        children = []
+        children = list(survivors)
         for s in survivors:
-            children += [mutate_roster(s, player_list, budget, num_remove) 
-                        for _ in xrange(num_children)]
-        survivors = sorted(children, lambda x: x.get_value(), reverse=True)[:num_survivors]
+            for i in xrange(num_children):
+                children.append(mutate_roster(s, player_list, budget, num_remove, logger))
+        logger.info("%d children at epoch %d" % (len(children), e))
+        values = [c.get_value() for c in children]
+        logger.info("Best: %d, Worst: %d", max(values), min(values))
+        survivors = sorted(children, key=lambda c: c.get_value(), reverse=True)[:num_survivors]
+        logger.info("Survivor values: (%s)", ",".join(str(s.get_value()) for s in survivors))
 
-    return max(survivors, key=lambda x: x.get_value())
+        
+
+    return max(survivors, key=lambda c: c.get_value())
 
 if __name__ == "__main__":
     pass

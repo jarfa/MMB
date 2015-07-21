@@ -17,9 +17,8 @@ class Roster:
         self.player_list.append(player)
 
     def __repr__(self):
-        #sor this?
-        for p in self.player_list:
-            print "%s: %s" % (p.name, p.position)
+        #sort this?
+       return "(" + ",".join("%s: %s" % (p.name, p.position) for p in self.player_list) + ")"
 
     def length(self):
         return len(self.player_list)
@@ -38,7 +37,7 @@ class Roster:
         if budget:
             assert budget >= sum(p.fan_duel_cost for p in self.player_list)
 
-        assert self.length() == len(self.limits.keys())
+        assert self.length() == sum(self.limits.values())
 
         for k,v in self.allocated.iteritems():
             if v != self.limits[k]:

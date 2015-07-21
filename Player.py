@@ -17,6 +17,9 @@ class Player(object):
         self.baseball_reference_id = baseball_reference_id
         self.value = value
 
+    def __repr__(self):
+        return "%s, %s, %s, %s" % (self.name, self.mmb_id, self.fan_duel_cost, self.value)
+
     def print_player(self):
         print "MMB ID: " + self.mmb_id
         print "Name: " + self.name
@@ -25,6 +28,7 @@ class Player(object):
         print "Fan Duel Id: " + self.fan_duel_id
         print "Fan Duel Cost: " + str(self.fan_duel_cost)
         print "Fan Duel FPPG: " + str(self.fan_duel_fppg)
+        print "Value: " + str(self.value)
         print "Injury/Suspension Status: " + str(self.injury_suspension_status)
         print ""
 
