@@ -23,6 +23,13 @@ class Roster:
     def length(self):
         return len(player_list)
 
+    def is_full(self):
+        for p,num in self.allocated.iteritems():
+            if num < self.limits[p]:
+                return False
+
+        return True
+
     def test_invariants(self, budget=None):
         if budget:
             assert budget >= sum(p.cost for p in self.player_list)
