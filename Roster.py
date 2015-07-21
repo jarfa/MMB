@@ -36,7 +36,7 @@ class Roster:
 
     def test_invariants(self, budget=None):
         if budget:
-            assert budget >= sum(p.cost for p in self.player_list)
+            assert budget >= sum(p.fan_duel_cost for p in self.player_list)
 
         assert self.length() == len(self.limits.keys())
 
