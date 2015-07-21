@@ -36,5 +36,8 @@ class Player(object):
     def getLastName(self):
         return self.name.split(" ", 1)[1]
 
+    def getPosition(self):
+        return self.position
+
 
 
