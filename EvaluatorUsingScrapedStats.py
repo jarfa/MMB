@@ -1,3 +1,5 @@
+from Matchup import Matchup
+
 __author__ = 'Kevin'
 
 # anchor extraction from html document
@@ -98,6 +100,29 @@ class EvaluatorUsingScrapedStats(Evaluator.Evaluator):
     def get_pitcher_batter_matchup(self, pitcher, batter):
         pitcher_batter_url = "http://www.baseball-reference.com/play-index/batter_vs_pitcher.cgi?batter=" \
                              + batter.getBaseballReferenceId() + "&pitcher=" + pitcher.getBaseballReferenceId()
+
+
+def getMatchups():
+    matchups_url = "http://www.baseball-reference.com/previews/"
+    matchups_page = requests.get(matchups_url)
+    print matchups_page.text
+    matchups_page_tree = html.fromstring(matchups_page.text)
+    matchup_elements = matchups_page_tree.xpath("//div[contains(@id, 'page_container')]/div[contains(@id, 'page_content')]/table[1]/tr/td/p")
+
+    matchups = list()
+    for matchup_elements in matchup_elements:
+        game = matchup_elements.findtext(".//a[1]")
+        away_pitcher = matchup_elements.findtext(".//a[2]")
+        home_pitcher = matchup_elements.findtext(".//a[3]")
+
+        game_split = game.split(" @ ")
+        away_team = game_split[0].split(" (")[0]
+        home_team = game_split[1].split(" (")[0]
+
+        matchup = Matchup(home_team, away_team, home_pitcher, away_pitcher)
+        matchups.append(matchup)
+
+    return matchups
 
 
 
