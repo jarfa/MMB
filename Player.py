@@ -1,9 +1,11 @@
 import TeamNumberToNameMapping
+from lxml import html
+import requests
 
 __author__ = 'MMB'
 class Player(object):
 
-    def __init__(self, name, position, team_number, fan_duel_id, fan_duel_cost, fan_duel_fppg, injury_suspension_status, baseball_reference_id=None, value=None):
+    def __init__(self, name, position, team_number, fan_duel_id, fan_duel_cost, fan_duel_fppg, injury_suspension_status, baseball_reference_id="", value=None):
         self.mmb_id = name + "." + str(team_number)
         self.name = name
         self.position = position
@@ -48,6 +50,8 @@ class Player(object):
         return self.injury_suspension_status
 
     def getBaseballReferenceId(self):
+        if self.baseball_reference_id == "":
+            self.find_baseball_reference_player_id()
         return self.baseball_reference_id
 
     def setBaseballReferenceId(self, baseball_reference_id):
@@ -59,6 +63,50 @@ class Player(object):
     def getFanDuelCost(self):
         return self.fan_duel_cost
 
+    def get_player_page_url(self):
+        return Player.construct_player_page_url(self.getBaseballReferenceId())
+
+    def find_baseball_reference_player_id(self):
+        last_name_substr = self.getLastName()[:5].lower()
+        first_name_substr = self.getFirstName()[:2].lower()
+        name_iteration_number = 1
+
+        found_baseball_reference_player_id = False
+        while not found_baseball_reference_player_id and name_iteration_number < 10:
+            print found_baseball_reference_player_id
+            print name_iteration_number
+
+            name_iteration_number_string =  "%02d" % (name_iteration_number,)
+
+            test_player_id = last_name_substr + first_name_substr + name_iteration_number_string
+            if self.validate_team(test_player_id):
+                self.setBaseballReferenceId(test_player_id)
+                found_baseball_reference_player_id = True
+
+            name_iteration_number += 1
+
+    def validate_team(self, test_player_id):
+        player_page_url = Player.construct_player_page_url(test_player_id)
+        player_page = requests.get(player_page_url)
+        tree = html.fromstring(player_page.text)
+        organization = tree.xpath("//span[contains(@itemprop, 'organization')]")[0].text_content()
+
+        teams_years_split = organization.split(" ", 1)
+        teams = teams_years_split[0]
+        years = teams_years_split[1]
+
+        last_team = teams.split("/")[-1]
+        last_year = years.split("-")[-1]
+
+        if last_year == "2015" and last_team == self.getTeamName():
+            return True
+
+        return False
+
+    @classmethod
+    def construct_player_page_url(cls, baseball_reference_id):
+        first_character = baseball_reference_id[0]
+        return "http://www.baseball-reference.com/players/" + first_character + "/" + baseball_reference_id + ".shtml"
 
 
 
