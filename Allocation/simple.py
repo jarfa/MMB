@@ -19,8 +19,6 @@ def simple_list(player_list, budget = 35000):
             roster.add(p)
             remaining_budget -= p.cost
         else: # look at the next best player
-            if roster.is_full()
-                break
             if p.cost > remaining_budget:
                 reason_string = "player cost (%d) was over remaining budget (%d/%d)" % (
                     p.cost, remaining_budget, budget)
@@ -29,7 +27,9 @@ def simple_list(player_list, budget = 35000):
                     p.position, roster.allocated[p.position])
 
             print ("Skipped %s because " % p.name) + reason_string
-            continue
+            
+        if roster.is_full()
+                break
 
     #testing
     roster.test_invariants(budget)
