@@ -1,11 +1,14 @@
 __author__ = 'Mike'
 
 # anchor extraction from html document
-from bs4 import BeautifulSoup
-from Player.Player import Player
 import urllib2
 import re
 import json
+
+from bs4 import BeautifulSoup
+
+import Player
+
 
 class FanDuelScraper:
 
@@ -34,8 +37,12 @@ class FanDuelScraper:
             team_number = data[fan_duel_id][2]
             fan_duel_cost = data[fan_duel_id][5]
             fan_duel_fppg = data[fan_duel_id][6]
+            injury_suspension_string = data[fan_duel_id][12]
 
-            player = Player(name, position, team_number, fan_duel_id, fan_duel_cost, fan_duel_fppg)
+            injury_suspension_status = 0
+            if injury_suspension_string != "":
+                injury_suspension_status = 1
+            player = Player(name, position, team_number, fan_duel_id, fan_duel_cost, fan_duel_fppg, injury_suspension_status)
 
             fan_duel_players.append(player)
 

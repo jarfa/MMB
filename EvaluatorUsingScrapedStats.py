@@ -3,11 +3,15 @@ __author__ = 'Kevin'
 # anchor extraction from html document
 from lxml import html
 import requests
+
 import Evaluator
+
+
 #import sys
 #sys.path.insert(0, 'C:/work/MMB/Player')
 #import Player
-from Player.Player import Player
+import Player
+
 
 class EvaluatorUsingScrapedStats(Evaluator.Evaluator):
 
@@ -63,21 +67,33 @@ class EvaluatorUsingScrapedStats(Evaluator.Evaluator):
 
     def get_pitcher_batter_matchup(self, pitcher, batter):
         pitcher_batter_url = "http://www.baseball-reference.com/play-index/batter_vs_pitcher.cgi?batter=" \
-                             + self.get_player_id(pitcher) + "&pitcher=" + self.get_player_id(batter)
+                             + batter.getBaseballReferenceId() + "&pitcher=" + pitcher.getBaseballReferenceId()
 
-    def get_player_id(self, player):
+    def get_player_page_url(self, baseball_reference_id):
+        return "http://www.baseball-reference.com/players/j/" + baseball_reference_id + ".shtml"
+
+    def find_baseball_reference_player_id(self, player):
         last_name_substr = player.getLastName()[:5]
         first_name_substr = player.getFirstName()[:2]
-        name_iteration_number = "01"
+        name_iteration_number = 1
 
-        return last_name_substr + first_name_substr + name_iteration_number
+        found_baseball_reference_player_id = False
+        while not found_baseball_reference_player_id and name_iteration_number < 10:
+            name_iteration_number_string =  "%02d" % (name_iteration_number,)
 
-    def get_player_page_url(self, player):
-        player_id_url = "http://www.baseball-reference.com/players/j/" + self.get_player_id(player) + ".shtml"
+            test_player_id = last_name_substr + first_name_substr + name_iteration_number_string
+            if self.validate_team(test_player_id, player.getTeamName()):
+                player.setBaseballReferenceId(test_player_id)
+                found_baseball_reference_player_id = True
 
-    def get_team(self, player):
-        self.get_player_page_url(player)
-        player_page = requests.get(EvaluatorUsingScrapedStats.getUrlToPull(self.get_player_page_url(player)))
+            name_iteration_number += 1
+
+        return found_baseball_reference_player_id
+
+
+    def validate_team(self, test_player_id, expected_team):
+        player_page_url = self.get_player_page_url(test_player_id)
+        player_page = requests.get(EvaluatorUsingScrapedStats.getUrlToPull(player_page_url))
         tree = html.fromstring(player_page.text)
         organization = tree.xpath("//span[contains(@itemprop, 'organization'])")
         print organization
@@ -89,7 +105,11 @@ class EvaluatorUsingScrapedStats(Evaluator.Evaluator):
         last_team = teams.split("/")[-1]
         last_year = years.split("-")[-1]
 
-        #if(last_year == "2015" and last_team ==
+
+        if(last_year == "2015" and last_team == expected_team):
+            return True
+
+        return False
 
 
 e = EvaluatorUsingScrapedStats(5)
