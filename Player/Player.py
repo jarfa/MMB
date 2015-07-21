@@ -24,5 +24,17 @@ class Player(object):
     def getFPPG(self):
         return self.fan_duel_fppg
 
+    def getName(self):
+        return self.name
+
+    def getTeam(self):
+        return self.team_number
+
+    def getFirstName(self):
+        return self.name.split(" ", 1)[0]
+
+    def getLastName(self):
+        return self.name.split(" ", 1)[1]
+
 
 
