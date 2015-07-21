@@ -32,6 +32,12 @@ class Player(object):
         print "Injury/Suspension Status: " + str(self.injury_suspension_status)
         print ""
 
+    def setValue(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
     def getFPPG(self):
         return self.fan_duel_fppg
 

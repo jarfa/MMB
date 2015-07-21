@@ -24,17 +24,30 @@ class EvaluatorUsingScrapedStats(Evaluator.Evaluator):
         return 'http://www.baseball-reference.com/players/gl.cgi?id=' + player.getLastName().lower()[:5] + player.getFirstName().lower()[:2] +'01&t=p&year=2015'
 
     def getPlayerValue(self, player):
-        score = 0
-        if(player.getPosition() == 'p'):
-            score += EvaluatorUsingScrapedStats.getPitcherScore(self.cutoff)
+        avgScoreInRecentGames = 0
+        if(player.getPosition().lower() == 'p'):
+            avgScoreInRecentGames += EvaluatorUsingScrapedStats.getPitcherScore(self.cutoff, player)
             #TODO::if the pitcher will be batting add their batter score
         else:
-            score += EvaluatorUsingScrapedStats.getBatterScore(self.cutoff)
+            avgScoreInRecentGames += EvaluatorUsingScrapedStats.getBatterScore(self.cutoff, player)
 
-        return score
+        avgScoreInAllGames = player.getFPPG() * player.getFanDuelCost() / float(1000)
+
+        injurySuspensionStatus = player.getInjurySuspensionStatus()
+
+        #TODO something about matchup
+
+        return EvaluatorUsingScrapedStats.weightingAlgorithmBasedOnMachineLearningMagic(avgScoreInRecentGames, avgScoreInAllGames, injurySuspensionStatus) 
 
     @staticmethod
-    def getBatterScore(cutoff):
+    def weightingAlgorithmBasedOnMachineLearningMagic(avgScoreInRecentGames, avgScoreInAllGames, injurySuspensionStatus):
+        if(injurySuspensionStatus == 1):
+            return 0
+        else:
+            return avgScoreInRecentGames
+
+    @staticmethod
+    def getBatterScore(cutoff, player):
         page = requests.get(EvaluatorUsingScrapedStats.getBatterUrl(player))
         tree = html.fromstring(page.text)
         stuff = tree.xpath('//tr[contains(@id,"batting_gamelogs")]')
@@ -53,16 +66,18 @@ class EvaluatorUsingScrapedStats(Evaluator.Evaluator):
             atBats = int(i.findtext('.//td[11]'))
             outs = atBats - hits
             scoreThatGame = hits + 2*twoB + 3*threeB + 4*hr + rbi + runs + bb + 2*sb + hbp - outs/float(4)
-            print 'hits: ', hits, ', 2b: ', twoB, ', 3b: ', threeB, ', hrs: ', hr, ', rbi: ', rbi, ', runs: ', runs, ', bb: ', bb, ', sb: ', sb, ', hbp ', hbp, ', outs ', outs, ', score: ', scoreThatGame
+            #print 'hits: ', hits, ', 2b: ', twoB, ', 3b: ', threeB, ', hrs: ', hr, ', rbi: ', rbi, ', runs: ', runs, ', bb: ', bb, ', sb: ', sb, ', hbp ', hbp, ', outs ', outs, ', score: ', scoreThatGame
             currentScore += scoreThatGame
             
             iteration += 1
             if(iteration >= cutoff):
                 break
+        if(iteration == 0):
+            return 0
         return currentScore / float(iteration)
 
     @staticmethod
-    def getPitcherScore(cutoff):
+    def getPitcherScore(cutoff, player):
         page = requests.get(EvaluatorUsingScrapedStats.getPitcherUrl(player))
         tree = html.fromstring(page.text)
         stuff = tree.xpath('//tr[contains(@id,"pitching_gamelogs")]')
@@ -80,12 +95,14 @@ class EvaluatorUsingScrapedStats(Evaluator.Evaluator):
             if(win):
                 scoreThatGame = 4
             scoreThatGame += ip + so - er
-            print 'win: ', win, ', ip: ', ip, ', so: ', so, ', er: ', er, 'score: ', scoreThatGame
+            #print 'win: ', win, ', ip: ', ip, ', so: ', so, ', er: ', er, 'score: ', scoreThatGame
             currentScore += scoreThatGame
             
             iteration += 1
             if(iteration >= cutoff):
                 break
+        if(iteration == 0):
+            return 0
         return currentScore / float(iteration)
 
     @staticmethod
