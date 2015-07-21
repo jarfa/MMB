@@ -85,8 +85,6 @@ def genetic_list(player_list, budget = 35000, epochs=10, num_children = 5,
         survivors = sorted(children, key=lambda c: c.get_value(), reverse=True)[:num_survivors]
         logger.info("Survivor values: (%s)", ",".join(str(s.get_value()) for s in survivors))
 
-        
-
     return max(survivors, key=lambda c: c.get_value())
 
 if __name__ == "__main__":
