@@ -82,7 +82,7 @@ class EvaluatorUsingScrapedStats(Evaluator.Evaluator):
             name_iteration_number_string =  "%02d" % (name_iteration_number,)
 
             test_player_id = last_name_substr + first_name_substr + name_iteration_number_string
-            if self.validate_team(test_player_id, player.getTeamName()):
+            if self.validate_team(test_player_id, player.getTeamName):
                 player.setBaseballReferenceId(test_player_id)
                 found_baseball_reference_player_id = True
 
