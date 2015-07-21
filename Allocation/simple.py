@@ -14,19 +14,21 @@ def simple_list(player_list, budget = 35000):
     player_list.sort(key=lambda p: p.value/p.cost, reverse=True)
     
     for p in player_list:
-        if roster.allocated[p.position] < roster.limits[p.position] \
-        and remaining_budget >= p.cost:
+        if roster.allocated[p.position] < roster.limits[p.position] and \
+                remaining_budget >= p.cost:
             roster.add(p)
             remaining_budget -= p.cost
         else: # look at the next best player
+            if roster.is_full()
+                break
             if p.cost > remaining_budget:
-                reason_string = "player (cost %d) was over remaining_budget (%d)" % (
-                    p.cost, remaining_budget)
+                reason_string = "player cost (%d) was over remaining budget (%d/%d)" % (
+                    p.cost, remaining_budget, budget)
             else:
-                reason_string = "slot for %s already has %d members" % (
+                reason_string = "slot for position %s already has %d members" % (
                     p.position, roster.allocated[p.position])
 
-            print "Skipped %s because " + 
+            print ("Skipped %s because " % p.name) + reason_string
             continue
 
     #testing
