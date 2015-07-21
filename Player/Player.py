@@ -11,6 +11,9 @@ class Player(object):
         self.fan_duel_fppg = float(fan_duel_fppg)
         self.value = value
 
+    def __repr__(self):
+        return "%s, %s, %s, %s" % (self.name, self.mmb_id, self.fan_duel_cost, self.value)
+
     def print_player(self):
         print "MMB ID: " + self.mmb_id
         print "Name: " + self.name
@@ -19,7 +22,7 @@ class Player(object):
         print "Fan Duel Id: " + self.fan_duel_id
         print "Fan Duel Cost: " + str(self.fan_duel_cost)
         print "Fan Duel FPPG: " + str(self.fan_duel_fppg)
-        print ""
+        print "Value: " + str(self.value)
 
     def getFPPG(self):
         return self.fan_duel_fppg
