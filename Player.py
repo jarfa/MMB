@@ -3,17 +3,17 @@ import TeamNumberToNameMapping
 __author__ = 'MMB'
 class Player(object):
 
-    def __init__(self, name, position, team_number, fan_duel_id, fan_duel_cost, fan_duel_fppg, injury_suspension_status):
-        self.mmb_id = name + "." + team_number
+    def __init__(self, name, position, team_number, fan_duel_id, fan_duel_cost, fan_duel_fppg, injury_suspension_status, baseball_reference_id=None, value=None):
+        self.mmb_id = name + "." + str(team_number)
         self.name = name
         self.position = position
-        self.team_number = team_number
+        self.team_number = str(team_number)
         self.fan_duel_id = fan_duel_id
         self.fan_duel_cost = float(fan_duel_cost)
         self.fan_duel_fppg = float(fan_duel_fppg)
         self.injury_suspension_status = injury_suspension_status
-        self.baseball_reference_id = ""
-
+        self.baseball_reference_id = baseball_reference_id
+        self.value = value
 
     def print_player(self):
         print "MMB ID: " + self.mmb_id
