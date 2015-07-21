@@ -1,6 +1,7 @@
 __author__ = 'Mike'
 
 class TeamNumberToNameMapping:
+
     team_number_to_name_map = {'591': 'Orioles',
                                '592': 'Red Sox',
                                '593': 'Yankees',
@@ -31,8 +32,7 @@ class TeamNumberToNameMapping:
                                '618': 'Dodgers',
                                '619': 'Padres',
                                '620': 'Giants'
-    }
+                            }
 
-    @staticmethod
-    def get_team_name(team_number):
-        return TeamNumberToNameMapping.team_number_to_name_map[team_number]
+def get_team_name(team_number):
+    return TeamNumberToNameMapping.team_number_to_name_map[team_number]

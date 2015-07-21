@@ -60,6 +60,9 @@ class Player(object):
     def getPosition(self):
         return self.position
 
+    def getFanDuelCost(self):
+        return self.fan_duel_cost
+
 
 
 
