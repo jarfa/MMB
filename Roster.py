@@ -33,6 +33,9 @@ class Roster:
     def get_value(self):
         return sum(p.value for p in self.player_list)
 
+    def get_cost(self):
+        return sum(p.fan_duel_cost for p in self.player_list)
+
     def test_invariants(self, budget=None):
         if budget:
             assert budget >= sum(p.fan_duel_cost for p in self.player_list)
