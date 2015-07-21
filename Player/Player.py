@@ -1,7 +1,7 @@
 __author__ = 'MMB'
 class Player(object):
 
-    def __init__(self, name, position, team_number, fan_duel_id, fan_duel_cost, fan_duel_fppg):
+    def __init__(self, name, position, team_number, fan_duel_id, fan_duel_cost, fan_duel_fppg, value=None):
         self.mmb_id = name + "." + team_number
         self.name = name
         self.position = position
@@ -9,7 +9,7 @@ class Player(object):
         self.fan_duel_id = fan_duel_id
         self.fan_duel_cost = float(fan_duel_cost)
         self.fan_duel_fppg = float(fan_duel_fppg)
-
+        self.value = value
 
     def print_player(self):
         print "MMB ID: " + self.mmb_id
