@@ -39,11 +39,16 @@ def simple_list(player_list, budget = 35000, logger=None):
     """
     remaining_budget = budget
     roster = Roster()
-    player_list.sort(key=lambda p: p.value/p.fan_duel_cost, reverse=True)
+    # player_list.sort(key=lambda p: p.value/p.fan_duel_cost, reverse=True)
+    
+    #find min player cost
+    min_cost = sorted(p.getFanDuelCost() for p in player_list)[9]
+
+    player_list.sort(key=lambda p: p.getFPPG(), reverse=True)
     
     for p in player_list:
         if roster.allocated[p.position] < roster.limits[p.position] and \
-                remaining_budget >= p.fan_duel_cost:
+        remaining_budget - p.fan_duel_cost >= (9 - roster.length())* min_cost:
             roster.add(p)
             remaining_budget -= p.fan_duel_cost
             logger.debug("Currently have %d players: %s", roster.length(), roster)
