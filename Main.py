@@ -1,4 +1,4 @@
-from EvaluatorUsingScrapedStats import EvaluatorUsingScrapedStats
+from EvaluatorBasic import EvaluatorBasic
 import FanDuelScraper
 import allocation
 import logging
@@ -8,28 +8,22 @@ __author__ = 'Mike'
 # fan_duel_game_url = "https://www.fanduel.com/e/Game/12664"
 fan_duel_game_url = ""
 
+
 # all_players = PlayersLoader.get_all_players()
-fan_duel_players = FanDuelScraper.get_fan_duel_players(fan_duel_game_url)
+fan_duel_players = FanDuelScraper.get_fan_duel_players(fan_duel_game_url).values()g
+
 
 # merge_player(all_players, fan_duel_players)
-
-evaluator = EvaluatorUsingScrapedStats(5)
+evaluator = EvaluatorBasic()
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
 logger = logging.getLogger(__name__)
 logger.info('Started logging')
 
-doNotMakeMeHateYou = 0
-
-for player in fan_duel_players.values():
-    #player.print_player()
-    doNotMakeMeHateYou += 1
-    if(doNotMakeMeHateYou < 20):
-    	score = evaluator.getPlayerValue(player)
-    	player.setValue(score)
-    	print 'player: ', player.getName(), ' got a score of: ', str(player.getValue())
-    else:
-    	player.setValue(0)
+for player in fan_duel_players:
+ 	score = evaluator.getPlayerValue(player)
+ 	print 'player: ', player.getName(), ' got a score of: ', score
+   	player.setValue(score)
 
 print'\n------ time to see who to use -------\n'
 genetic_roster = allocation.genetic_list(fan_duel_players, budget = 35000, epochs=10, 

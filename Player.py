@@ -7,14 +7,14 @@ __author__ = 'MMB'
 class Player(object):
 
     def __init__(self, name, position, team_number, fan_duel_id, fan_duel_cost, fan_duel_fppg, injury_suspension_status, baseball_reference_id="", value=None):
-        name_mod = re.sub("[^A-Za-z0-9 ]","",name)
+        # name_mod = re.sub("[^A-Za-z0-9 ]","",name)
         # if name != name_mod:
         #     print name
         #     print name_mod
         #     print ""
 
-        self.mmb_id = name_mod + "." + str(team_number)
-        self.name = name_mod
+        self.mmb_id = name + "." + str(team_number)
+        self.name = str(name)
         self.position = position
         self.team_number = str(team_number)
         self.fan_duel_id = fan_duel_id
