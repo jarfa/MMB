@@ -5,10 +5,16 @@ import logging
 
 __author__ = 'Mike'
 
-fan_duel_game_url = "https://www.fanduel.com/e/Game/12674"
+# fan_duel_game_url = "https://www.fanduel.com/e/Game/12664"
+fan_duel_game_url = ""
 
-fan_duel_players = FanDuelScraper.get_fan_duel_players(fan_duel_game_url)
 
+
+# all_players = PlayersLoader.get_all_players()
+fan_duel_players = FanDuelScraper.get_fan_duel_players(fan_duel_game_url).values()g
+
+
+# merge_player(all_players, fan_duel_players)
 evaluator = EvaluatorBasic()
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(message)s', 
@@ -31,3 +37,10 @@ genetic_roster = allocation.genetic_list(fan_duel_players, budget = 35000, epoch
     num_children = 10, num_survivors = 4, num_remove = 2, rseed=10, logger=logger)
 logger.info("Genetic roster: %s", genetic_roster)
 logger.info("Genetic roster value: %s " , genetic_roster.get_value())
+
+
+def merge_player(all_players, fan_duel_players):
+    for fan_duel_player in fan_duel_players.values():
+        player = all_players[fan_duel_player.getMMBID()]
+        player.set_fan_duel_values(fan_duel_player)
+

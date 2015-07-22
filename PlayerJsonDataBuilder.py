@@ -128,6 +128,7 @@ class PlayerJsonBuilder():
         else:
             return float(ip)
 
+
 if __name__ == "__main__":
     inputFile = open('listOfNames.txt', 'r')
     fan_duel_players = []
@@ -147,4 +148,4 @@ if __name__ == "__main__":
             f.write('\"'+player.getName() + '\" : ' + json_data + '\n')
             print 'wrote for: ', player.getName()
         except Exception, e:
-            print e       
+            print e
