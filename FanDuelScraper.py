@@ -28,7 +28,7 @@ def get_fan_duel_players(fan_duel_game_url):
     # print json.dumps(data,indent=1)
 
 
-    fan_duel_players = list()
+    fan_duel_players = dict()
     for fan_duel_id in data.keys():
 
         position = data[fan_duel_id][0]
@@ -43,7 +43,6 @@ def get_fan_duel_players(fan_duel_game_url):
             injury_suspension_status = 1
 
         player = Player(name, position, team_number, fan_duel_id, fan_duel_cost, fan_duel_fppg, injury_suspension_status)
-
-        fan_duel_players.append(player)
+        fan_duel_players[player.getMMBID()] = player
 
     return fan_duel_players

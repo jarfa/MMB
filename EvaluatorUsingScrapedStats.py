@@ -114,15 +114,24 @@ class EvaluatorUsingScrapedStats(Evaluator.Evaluator):
         else:
             return float(ip)
 
-    def get_pitcher_batter_matchup(self, pitcher, batter):
-        pitcher_batter_url = "http://www.baseball-reference.com/play-index/batter_vs_pitcher.cgi?batter=" \
-                             + batter.getBaseballReferenceId() + "&pitcher=" + pitcher.getBaseballReferenceId()
+def get_pitcher_batter_matchup(pitcher, batter):
+    pitcher_batter_url = "http://www.baseball-reference.com/play-index/batter_vs_pitcher.cgi?batter="\
+                         + batter.getBaseballReferenceId() + "&pitcher=" + pitcher.getBaseballReferenceId()
 
+    print pitcher_batter_url
+    pitcher_batter_matchup_page = requests.get(pitcher_batter_url)
+    pitcher_batter_matchup_tree = html.fromstring(pitcher_batter_matchup_page)
+    pitcher_batter_matchup_elements = pitcher_batter_matchup_tree.xpath("//div[contains(@id,'dataOut')]/div[1]/"
+                                                                        "div[contains(@id,'div_ajax_result_table_1')]/table/tbody/tr[last()]/td")
+
+    print pitcher_batter_matchup_elements
+
+    # "//div[contains(@id,'dataOut')]/div[1]/div[contains(@id,'div_ajax_result_table_1')]/table/tbody/tr[last()]"
+    print pitcher_batter_matchup_elements
 
 def getMatchups():
     matchups_url = "http://www.baseball-reference.com/previews/"
     matchups_page = requests.get(matchups_url)
-    print matchups_page.text
     matchups_page_tree = html.fromstring(matchups_page.text)
     matchup_elements = matchups_page_tree.xpath("//div[contains(@id, 'page_container')]/div[contains(@id, 'page_content')]/table[1]/tr/td/p")
 

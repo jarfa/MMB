@@ -1,13 +1,20 @@
 import TeamNumberToNameMapping
 from lxml import html
 import requests
+import re
 
 __author__ = 'MMB'
 class Player(object):
 
     def __init__(self, name, position, team_number, fan_duel_id, fan_duel_cost, fan_duel_fppg, injury_suspension_status, baseball_reference_id="", value=None):
-        self.mmb_id = name + "." + str(team_number)
-        self.name = name
+        name_mod = re.sub("[^A-Za-z0-9 ]","",name)
+        # if name != name_mod:
+        #     print name
+        #     print name_mod
+        #     print ""
+
+        self.mmb_id = name_mod + "." + str(team_number)
+        self.name = name_mod
         self.position = position
         self.team_number = str(team_number)
         self.fan_duel_id = fan_duel_id
@@ -31,6 +38,9 @@ class Player(object):
         print "Value: " + str(self.value)
         print "Injury/Suspension Status: " + str(self.injury_suspension_status)
         print ""
+
+    def getMMBID(self):
+        return self.mmb_id
 
     def setValue(self, value):
         self.value = value
@@ -112,6 +122,13 @@ class Player(object):
             return True
 
         return False
+
+    def set_fan_duel_values(self, fan_duel_player):
+        self.team_number = fan_duel_player.team_number
+        self.fan_duel_id = fan_duel_player.fan_duel_id
+        self.fan_duel_cost = fan_duel_player.fan_duel_cost
+        self.fan_duel_fppg = fan_duel_player.fan_duel_fppg
+
 
     @classmethod
     def construct_player_page_url(cls, baseball_reference_id):

@@ -11,7 +11,7 @@ print "Pulled Fan Duel Data"
 print len(fan_duel_players)
 assert len(fan_duel_players) > 100
 for player in fan_duel_players:
-    if(player.getName() == "Danny Salazar"):
+    if player.getName() == "Danny Salazar":
         assert player.getPosition() == "P"
         print player.getTeamNumber()
         assert player.getTeamNumber() == "597"
