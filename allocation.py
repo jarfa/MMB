@@ -48,7 +48,7 @@ def simple_list(player_list, budget = 35000, logger=None):
     
     for p in player_list:
         if roster.allocated[p.position] < roster.limits[p.position] and \
-        remaining_budget - p.fan_duel_cost >= (9 - roster.length())* min_cost:
+        remaining_budget - p.fan_duel_cost >= (9 - roster.length() - 1)* min_cost:
             roster.add(p)
             remaining_budget -= p.fan_duel_cost
             logger.debug("Currently have %d players: %s", roster.length(), roster)
