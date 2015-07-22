@@ -11,7 +11,7 @@ fan_duel_game_url = ""
 
 
 # all_players = PlayersLoader.get_all_players()
-fan_duel_players = FanDuelScraper.get_fan_duel_players(fan_duel_game_url).values()g
+fan_duel_players = FanDuelScraper.get_fan_duel_players(fan_duel_game_url).values()
 
 
 # merge_player(all_players, fan_duel_players)
