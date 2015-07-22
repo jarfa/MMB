@@ -2,30 +2,6 @@ import logging
 import random
 from Roster import Roster
 
-# from openopt import *
-# def knapsack_list(players, budget=35000):
-#     """
-#     players is a list of dicts, each with keys:
-#     id, name, cost, value, 
-#     P, C, 1B, 2B, 3B, SS, OF
-#     - player_id is {3 letter team code}_{jersey number}
-#     - player positions variables are either 1 or 0
-#     """
-#     constraints = lambda values: ( #I suspect it won't be able to handle ==
-#                             values['cost'] <= budget,
-#                             values['P'] <= 1,
-#                             values['C'] <= 1,
-#                             values['1B'] <= 1,
-#                             values['2B'] <= 1,
-#                             values['3B'] <= 1,
-#                             values['SS'] <= 1,
-#                             values['OF'] <= 3,
-#                             )
-#     objective = "value"
-#     p = KSP(objective, players, constraints = constraints, name = 'list_opt')
-#     r = p.solve('interalg', plot=1, iprint = 1) #could also solve with 'glpk'
-#     # see r.solutions, r.solutions.coords, r.solutions.values
-
 def roster_log(logger, roster, budget, remaining):
     logger.info("Built roster %s with remaining budget %d/%d", 
         roster, remaining, budget)
@@ -39,11 +15,7 @@ def simple_list(player_list, budget = 35000, logger=None):
     """
     remaining_budget = budget
     roster = Roster()
-    # player_list.sort(key=lambda p: p.value/p.fan_duel_cost, reverse=True)
-    
-    #find min player cost
     min_cost = sorted(p.getFanDuelCost() for p in player_list)[9]
-
     player_list.sort(key=lambda p: p.getFPPG(), reverse=True)
     
     for p in player_list:
@@ -73,7 +45,6 @@ def simple_list(player_list, budget = 35000, logger=None):
 
 def mutate_roster(roster, player_list, budget, num_remove=2, logger=None):
     #take away num_remove of the current roster, re-build using other players
-    # num_remove = random.choice(range(1, num_remove+1))
     remove_list = random.sample(roster.player_list, num_remove)
     new_list = list(set(player_list) - set(remove_list))
     roster.test_invariants(budget)
@@ -84,11 +55,11 @@ def genetic_list(player_list, budget = 35000, epochs=10, num_children = 5,
     random.seed(rseed)
     #initialize simple_list
     survivors = [simple_list(player_list, budget, logger=logger)] #1-length list for the first iteration
-    #mutating means remove 1 (or 2?) player that's currently in the roster from player_list, try again
+    #mutating means remove 1 (or 2?) players that are currently in the roster from player_list, try again
     for e in xrange(epochs):
         children = list(survivors)
         for s in survivors:
-            for i in xrange(num_children):
+            for _ in xrange(num_children):
                 children.append(mutate_roster(s, player_list, budget, num_remove, logger))
         logger.info("%d children at epoch %d" % (len(children), e))
         values = [c.get_value() for c in children]
