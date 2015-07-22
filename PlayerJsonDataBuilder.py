@@ -134,7 +134,7 @@ fan_duel_players = []
 for line in inputFile:
     fan_duel_players.append(Player.Player(line, 'b', '1', '1', '1000', '3.2538', 0.0))
 
-f = open('jsonFile', 'w')
+f = open('jsonFile.json', 'w')
 
 for player in fan_duel_players:
     print 'trying for: ', player.getName()

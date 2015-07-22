@@ -2,7 +2,8 @@ import FanDuelScraper
 
 __author__ = 'Mike'
 
-fan_duel_game_url = "https://www.fanduel.com/e/Game/12664"
+# fan_duel_game_url = "https://www.fanduel.com/e/Game/12664"
+fan_duel_game_url = ""
 
 fan_duel_players = FanDuelScraper.get_fan_duel_players(fan_duel_game_url)
 
